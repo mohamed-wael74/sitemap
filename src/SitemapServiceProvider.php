@@ -1,12 +1,12 @@
 <?php
 
-namespace SolutionPlus\Sitemap;
+namespace Otas\Sitemap;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use SolutionPlus\Sitemap\Console\Commands\GenerateSitemapCommand;
-use SolutionPlus\Sitemap\Console\Commands\SitemapPublishRoutesCommand;
-use SolutionPlus\Sitemap\Console\Commands\SitemapSetupCommand;
+use Otas\Sitemap\Console\Commands\GenerateSitemapCommand;
+use Otas\Sitemap\Console\Commands\SitemapPublishRoutesCommand;
+use Otas\Sitemap\Console\Commands\SitemapSetupCommand;
 
 class SitemapServiceProvider extends ServiceProvider
 {

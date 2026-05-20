@@ -1,9 +1,9 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Console\Commands;
+namespace Otas\Sitemap\Console\Commands;
 
 use Illuminate\Console\Command;
-use SolutionPlus\Sitemap\Helpers\GenerateSitemapHelper;
+use Otas\Sitemap\Helpers\GenerateSitemapHelper;
 
 class GenerateSitemapCommand extends Command
 {

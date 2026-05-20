@@ -1,5 +1,5 @@
 {
-  "name": "solutionplus/sitemap",
+  "name": "otas/sitemap",
   "type": "library",
   "description": "A laravel package to create and generate sitemaps",
   "license": "MIT",
@@ -25,20 +25,20 @@
   },
   "autoload": {
     "psr-4": {
-      "SolutionPlus\\Sitemap\\": "src/",
+      "Otas\\Sitemap\\": "src/",
       "Database\\Factories\\": "src/database/factories/",
       "Database\\Seeders\\": "src/database/seeders/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "SolutionPlus\\Sitemap\\Tests\\": "tests/"
+      "Otas\\Sitemap\\Tests\\": "tests/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "SolutionPlus\\Sitemap\\SitemapServiceProvider"
+        "Otas\\Sitemap\\SitemapServiceProvider"
       ]
     }
   },
