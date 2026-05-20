@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use SolutionPlus\Sitemap\Http\Controllers\Website\SitemapController;
+use Otas\Sitemap\Http\Controllers\Website\SitemapController;
 
 Route::group([
     'middleware' => [

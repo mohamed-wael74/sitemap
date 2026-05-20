@@ -1,8 +1,8 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Tests;
+namespace Otas\Sitemap\Tests;
 
-use SolutionPlus\Sitemap\SitemapServiceProvider;
+use Otas\Sitemap\SitemapServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {

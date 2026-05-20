@@ -1,10 +1,10 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Http\Controllers\Website;
+namespace Otas\Sitemap\Http\Controllers\Website;
 
 use Illuminate\Support\Facades\Storage;
-use SolutionPlus\Sitemap\Http\Controllers\Controller;
-use SolutionPlus\Sitemap\Helpers\SitemapHelperFunctions;
+use Otas\Sitemap\Http\Controllers\Controller;
+use Otas\Sitemap\Helpers\SitemapHelperFunctions;
 
 class SitemapController extends Controller
 {

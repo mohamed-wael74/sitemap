@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Console\Commands;
+namespace Otas\Sitemap\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -46,7 +46,7 @@ class SitemapPublishRoutesCommand extends Command
         );
 
         $this->callSilent('vendor:publish', [
-            '--provider' => 'SolutionPlus\Sitemap\SitemapServiceProvider',
+            '--provider' => 'Otas\Sitemap\SitemapServiceProvider',
         ]);
 
         exec('composer dump-autoload');

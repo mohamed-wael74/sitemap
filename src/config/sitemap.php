@@ -6,7 +6,7 @@ return [
     | sitemap Configuration
     |--------------------------------------------------------------------------
     |
-    | Here you may configure the options for the SolutionPlus sitemap package.
+    | Here you may configure the options for the Otas sitemap package.
     |
     */
 

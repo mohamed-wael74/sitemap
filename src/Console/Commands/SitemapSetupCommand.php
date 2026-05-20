@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Console\Commands;
+namespace Otas\Sitemap\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
@@ -64,7 +64,7 @@ class SitemapSetupCommand extends Command
     private function publishConfiguration($forcePublish = false)
     {
         $params = [
-            '--provider' => 'SolutionPlus\Sitemap\SitemapServiceProvider',
+            '--provider' => 'Otas\Sitemap\SitemapServiceProvider',
         ];
 
         if ($forcePublish === true) {

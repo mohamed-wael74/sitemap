@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Helpers;
+namespace Otas\Sitemap\Helpers;
 
 class SitemapHelperFunctions
 {

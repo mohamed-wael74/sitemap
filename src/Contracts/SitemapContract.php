@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Contracts;
+namespace Otas\Sitemap\Contracts;
 
 interface SitemapContract
 {

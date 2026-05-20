@@ -1,6 +1,6 @@
 <?php
 
-namespace SolutionPlus\Sitemap\Http\Controllers;
+namespace Otas\Sitemap\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
