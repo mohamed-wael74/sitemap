@@ -9,6 +9,6 @@ class SitemapHelperFunctions
         $fileName = config('sitemap.subdomain') ? config('sitemap.subdomain') . '-sitemap.xml' : 'sitemap.xml';
         $basePath = config('sitemap.base_path');
 
-        return ($basePath ? rtrim($basePath, '/') . '/' : '') . 'sitemaps/' . $fileName;
+        return ($basePath ? $basePath . '/' : '') . 'sitemaps/' . $fileName;
     }
 }
