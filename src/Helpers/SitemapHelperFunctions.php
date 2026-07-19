@@ -6,8 +6,9 @@ class SitemapHelperFunctions
 {
     public static function getSitemapFilePath(): string
     {
-        $fileName =  config('sitemap.subdomain') ? config('sitemap.subdomain') . '-sitemap.xml' : 'sitemap.xml';
+        $fileName = config('sitemap.subdomain') ? config('sitemap.subdomain') . '-sitemap.xml' : 'sitemap.xml';
+        $basePath = config('sitemap.base_path');
 
-        return 'sitemaps/' . $fileName;
+        return ($basePath ? $basePath . '/' : '') . 'sitemaps/' . $fileName;
     }
 }
