@@ -13,7 +13,6 @@ class HandleStaticSitemapHelper
         $staticLinks = config('sitemap.static_links');
 
         foreach ($staticLinks as $staticLink) {
-
             $otherLocs = [];
 
             foreach ($staticLink['other_locs'] as $otherLoc):
@@ -36,15 +35,40 @@ class HandleStaticSitemapHelper
                 ];
             endforeach;
 
+            $alternates = self::withXDefault($alternates);
+
             $urls[] = [
                 'loc' => $staticLink['loc'],
                 'other_locs' => $otherLocs,
                 'alternates' => $alternates,
                 'priority' => $staticLink['priority'],
             ];
-
         }
 
         return $urls;
+    }
+
+    private static function withXDefault(array $alternates): array
+    {
+        foreach ($alternates as $alternate):
+            if ($alternate['hreflang'] === 'x-default') {
+                return $alternates;
+            }
+        endforeach;
+
+        $defaultLocale = config('sitemap.default_locale');
+
+        foreach ($alternates as $alternate):
+            if ($alternate['hreflang'] === $defaultLocale) {
+                $alternates[] = [
+                    'hreflang' => 'x-default',
+                    'href' => $alternate['href'],
+                ];
+
+                break;
+            }
+        endforeach;
+
+        return $alternates;
     }
 }
