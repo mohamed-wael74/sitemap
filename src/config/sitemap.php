@@ -58,6 +58,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Base Path
+    |--------------------------------------------------------------------------
+    |
+    | An optional path segment prepended to the sitemap's storage location on
+    | the public disk. Useful in multi-tenant applications to scope each
+    | tenant's sitemap file to its own folder. Leave as null to store the
+    | sitemap at the disk root, as in a single-tenant application.
+    */
+    'base_path' => null,
+
+    /*
+    |--------------------------------------------------------------------------
     | Default Locale
     |--------------------------------------------------------------------------
     |
