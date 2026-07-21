@@ -11,6 +11,7 @@ class HandleStaticSitemapHelper
         $urls = [];
 
         $staticLinks = config('sitemap.static_links');
+        $defaultLocale = config('sitemap.default_locale');
 
         foreach ($staticLinks as $staticLink) {
 
@@ -21,7 +22,14 @@ class HandleStaticSitemapHelper
             endforeach;
 
             $alternates = [];
+            $defaultHref = null;
+            $hasXDefault = false;
+
             foreach ($staticLink['alternates'] as $alternate):
+
+                if ($alternate['hreflang'] === 'x-default') {
+                    $hasXDefault = true;
+                }
 
                 if (Str::contains($alternate['href'], "{$alternate['hreflang']}/")) {
                     $href = str_replace("{$alternate['hreflang']}/", '', $alternate['href']);
@@ -34,7 +42,19 @@ class HandleStaticSitemapHelper
                     'hreflang' => $alternate['hreflang'],
                     'href' => $href,
                 ];
+
+                if ($alternate['hreflang'] === $defaultLocale) {
+                    $defaultHref = $href;
+                }
+
             endforeach;
+
+            if (!$hasXDefault && $defaultHref !== null) {
+                $alternates[] = [
+                    'hreflang' => 'x-default',
+                    'href' => $defaultHref,
+                ];
+            }
 
             $urls[] = [
                 'loc' => $staticLink['loc'],
