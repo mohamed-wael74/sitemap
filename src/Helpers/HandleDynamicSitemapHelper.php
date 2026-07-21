@@ -94,11 +94,6 @@ class HandleDynamicSitemapHelper
      *
      * ALL placeholders (including :modelIdentifier if used) must be provided via the $slugResolver callback.
      *
-     * @param Collection $modelItems
-     * @param array      $translatedSegments  Path template per locale
-     * @param callable   $slugResolver        fn($modelItem): array — ALL placeholders
-     * @param float      $priority
-     * @return array
      */
     public static function buildDefaultUrls(
         Collection $modelItems,
