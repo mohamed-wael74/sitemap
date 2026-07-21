@@ -186,12 +186,13 @@ public static function sitemapTranslatedSegments(): array
 
 | Placeholder | Resolved by |
 |---|---|
-| `:modelIdentifier` | The package — automatically resolved from the model attribute (`buildDefaultUrls`) or from the translations table (`buildLocalizedUrls`) |
+| `:modelIdentifier` | Automatically resolved from the translations table (`buildLocalizedUrls` only). For `buildDefaultUrls`, you must provide it via `slugResolver`. |
 
-**Custom placeholders** (`:categorySlug`, `:brandSlug`, etc.) are resolved via the optional `$slugResolver` callback:
+**Custom placeholders** (`:categorySlug`, `:brandSlug`, etc.) are resolved via the `$slugResolver` callback:
 
 ```php
 slugResolver: fn($modelItem) => [
+    ':modelIdentifier' => $modelItem->slug,
     ':categorySlug' => $modelItem->category->slug,
 ]
 ```
@@ -203,13 +204,13 @@ The `$slugResolver` receives only the model item and returns a flat `[':placehol
 ### Non-Translated Slugs (`buildDefaultUrls`)
 
 Use this when the model's slug is the **same across all locales** (e.g. offers, products).
+Since the slug is the same, there's no automatic resolution of `:modelIdentifier`. You must provide ALL placeholders in the `slugResolver`.
 
 ```php
 HandleDynamicSitemapHelper::buildDefaultUrls(
     Collection $modelItems,       // The Eloquent collection
     array $translatedSegments,    // Path template per locale
-    ?callable $slugResolver,      // Optional: resolve extra placeholders
-    string $routeKeyName,         // Model attribute for :modelIdentifier (default: 'slug')
+    callable $slugResolver,       // Required: provide all placeholders
     float $priority,              // URL priority (default: 0.8)
 );
 ```
@@ -237,6 +238,9 @@ class Offer extends Model implements SitemapContract
         return HandleDynamicSitemapHelper::buildDefaultUrls(
             modelItems: $offers,
             translatedSegments: self::sitemapTranslatedSegments(),
+            slugResolver: fn($offer) => [
+                ':modelIdentifier' => $offer->slug,
+            ]
         );
     }
 }
@@ -331,6 +335,7 @@ class Offer extends Model implements SitemapContract
             modelItems: $offers,
             translatedSegments: self::sitemapTranslatedSegments(),
             slugResolver: fn($offer) => [
+                ':modelIdentifier' => $offer->slug,
                 ':categorySlug' => $offer->category->slug,
             ],
         );
@@ -405,6 +410,7 @@ class Product extends Model implements SitemapContract
             modelItems: $products,
             translatedSegments: self::sitemapTranslatedSegments(),
             slugResolver: fn($product) => [
+                ':modelIdentifier' => $product->slug,
                 ':brandSlug' => $product->brand->slug,
                 ':categorySlug' => $product->category->slug,
             ],
@@ -508,6 +514,9 @@ class Offer extends Model implements SitemapContract
         return HandleDynamicSitemapHelper::buildDefaultUrls(
             modelItems: self::visible()->get(),
             translatedSegments: self::sitemapTranslatedSegments(),
+            slugResolver: fn($offer) => [
+                ':modelIdentifier' => $offer->slug,
+            ]
         );
     }
 }
@@ -577,6 +586,9 @@ class Offer extends Model implements SitemapContract
         return HandleDynamicSitemapHelper::buildDefaultUrls(
             modelItems: self::visible()->get(),
             translatedSegments: self::sitemapTranslatedSegments(),
+            slugResolver: fn($offer) => [
+                ':modelIdentifier' => $offer->slug,
+            ]
         );
     }
 }
@@ -618,6 +630,7 @@ class Product extends Model implements SitemapContract
             modelItems: self::visible()->with(['brand', 'category'])->get(),
             translatedSegments: self::sitemapTranslatedSegments(),
             slugResolver: fn($product) => [
+                ':modelIdentifier' => $product->slug,
                 ':brandSlug' => $product->brand->slug,
                 ':categorySlug' => $product->category->slug,
             ],

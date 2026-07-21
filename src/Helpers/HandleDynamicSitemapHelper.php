@@ -47,7 +47,10 @@ class HandleDynamicSitemapHelper
                         'hreflang' => $altLocale,
                         'href' => self::formatSitemapUrl(
                             locale: $altLocale,
-                            path: self::resolvePlaceholders(template: $altTemplate, modelIdentifierValue: $altSlug, extraReplacements: $extraReplacements),
+                            path: self::resolvePlaceholders(
+                                template: $altTemplate,
+                                replacements: array_merge([':modelIdentifier' => $altSlug], $extraReplacements)
+                            ),
                         ),
                     ];
                 }
@@ -59,7 +62,10 @@ class HandleDynamicSitemapHelper
                     'hreflang' => 'x-default',
                     'href' => self::formatSitemapUrl(
                         locale: $defaultLocale,
-                        path: self::resolvePlaceholders(template: $defaultTemplate, modelIdentifierValue: $translations[$defaultLocale], extraReplacements: $extraReplacements),
+                        path: self::resolvePlaceholders(
+                            template: $defaultTemplate,
+                            replacements: array_merge([':modelIdentifier' => $translations[$defaultLocale]], $extraReplacements)
+                        ),
                     ),
                 ];
 
@@ -68,7 +74,10 @@ class HandleDynamicSitemapHelper
                 $urls[] = [
                     'loc' => self::formatSitemapUrl(
                         locale: $locale,
-                        path: self::resolvePlaceholders(template: $template, modelIdentifierValue: $slug, extraReplacements: $extraReplacements),
+                        path: self::resolvePlaceholders(
+                            template: $template,
+                            replacements: array_merge([':modelIdentifier' => $slug], $extraReplacements)
+                        ),
                     ),
                     'other_locs' => [],
                     'alternates' => $alternates,
@@ -83,15 +92,18 @@ class HandleDynamicSitemapHelper
     /**
      * Build sitemap URLs for models with non-translated slugs (e.g. offers).
      *
-     * The :modelIdentifier placeholder is automatically resolved to $modelItem->{$routeKeyName}.
-     * Any additional placeholders can be resolved via $slugResolver.
+     * ALL placeholders (including :modelIdentifier if used) must be provided via the $slugResolver callback.
      *
+     * @param Collection $modelItems
+     * @param array      $translatedSegments  Path template per locale
+     * @param callable   $slugResolver        fn($modelItem): array — ALL placeholders
+     * @param float      $priority
+     * @return array
      */
     public static function buildDefaultUrls(
         Collection $modelItems,
         array $translatedSegments,
-        ?callable $slugResolver = null,
-        string $routeKeyName = 'slug',
+        callable $slugResolver,
         float $priority = 0.8
     ): array {
         $urls = [];
@@ -99,10 +111,8 @@ class HandleDynamicSitemapHelper
         $locales = config('translatable.locales');
 
         foreach ($modelItems as $modelItem) {
-            $routeValue = $modelItem->{$routeKeyName};
-
-            // Resolve extra placeholders once per model item
-            $extraReplacements = $slugResolver ? $slugResolver($modelItem) : [];
+            // Resolve all placeholders once per model item
+            $replacements = $slugResolver($modelItem);
 
             foreach ($locales as $locale) {
                 $template = $translatedSegments[$locale] ?? $translatedSegments[$defaultLocale];
@@ -116,7 +126,7 @@ class HandleDynamicSitemapHelper
                         'hreflang' => $altLocale,
                         'href' => self::formatSitemapUrl(
                             locale: $altLocale,
-                            path: self::resolvePlaceholders(template: $altTemplate, modelIdentifierValue: $routeValue, extraReplacements: $extraReplacements),
+                            path: self::resolvePlaceholders(template: $altTemplate, replacements: $replacements),
                         ),
                     ];
                 }
@@ -128,14 +138,14 @@ class HandleDynamicSitemapHelper
                     'hreflang' => 'x-default',
                     'href' => self::formatSitemapUrl(
                         locale: $defaultLocale,
-                        path: self::resolvePlaceholders(template: $defaultTemplate, modelIdentifierValue: $routeValue, extraReplacements: $extraReplacements),
+                        path: self::resolvePlaceholders(template: $defaultTemplate, replacements: $replacements),
                     ),
                 ];
 
                 $urls[] = [
                     'loc' => self::formatSitemapUrl(
                         locale: $locale,
-                        path: self::resolvePlaceholders(template: $template, modelIdentifierValue: $routeValue, extraReplacements: $extraReplacements),
+                        path: self::resolvePlaceholders(template: $template, replacements: $replacements),
                     ),
                     'other_locs' => [],
                     'alternates' => $alternates,
@@ -148,12 +158,10 @@ class HandleDynamicSitemapHelper
     }
 
     /**
-     * Replace :modelIdentifier and any extra placeholders in the path template.
+     * Replace all placeholders in the path template.
      */
-    private static function resolvePlaceholders(string $template, string $modelIdentifierValue, array $extraReplacements = []): string
+    private static function resolvePlaceholders(string $template, array $replacements): string
     {
-        $replacements = array_merge([':modelIdentifier' => $modelIdentifierValue], $extraReplacements);
-
         return str_replace(array_keys($replacements), array_values($replacements), $template);
     }
 
