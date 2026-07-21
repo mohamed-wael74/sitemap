@@ -18,7 +18,7 @@ class HandleStaticSitemapHelper
             $otherLocs = [];
 
             foreach ($staticLink['other_locs'] as $otherLoc):
-                $otherLocs[] = rawurlencode($otherLoc);
+                $otherLocs[] = self::encodeHref($otherLoc);
             endforeach;
 
             $alternates = [];
@@ -33,9 +33,9 @@ class HandleStaticSitemapHelper
 
                 if (Str::contains($alternate['href'], "{$alternate['hreflang']}/")) {
                     $href = str_replace("{$alternate['hreflang']}/", '', $alternate['href']);
-                    $href = $alternate['hreflang'] . '/' . rawurlencode($href);
+                    $href = $alternate['hreflang'] . '/' . self::encodeHref($href);
                 } else {
-                    $href = rawurlencode($alternate['href']);
+                    $href = self::encodeHref($alternate['href']);
                 }
 
                 $alternates[] = [
@@ -66,5 +66,10 @@ class HandleStaticSitemapHelper
         }
 
         return $urls;
+    }
+
+    private static function encodeHref(string $href): string
+    {
+        return implode('/', array_map('rawurlencode', explode('/', $href)));
     }
 }
