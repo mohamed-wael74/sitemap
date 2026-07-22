@@ -103,16 +103,17 @@ class GenerateSitemapHelper
     {
         $websiteUrl = config('sitemap.website_url') ?? \str_replace('api.', '', config('app.url'));
 
-        if (config('sitemap.subdomain')) {
-            $baseUrl = parse_url($websiteUrl);
+        $hasSubdomain = (bool) config('sitemap.subdomain');
 
+        if ($hasSubdomain) {
+            $baseUrl = parse_url($websiteUrl);
             $websiteUrl = $baseUrl['scheme'] . '://' . config('sitemap.subdomain') . '.' . $baseUrl['host'];
         }
 
-        if (!Str::contains($websiteUrl, '://www.')) {
+        if (!$hasSubdomain && !Str::contains($websiteUrl, '://www.')) {
             $websiteUrl = str_replace('://', '://www.', $websiteUrl);
         }
-        
+
         return $websiteUrl;
     }
 }
